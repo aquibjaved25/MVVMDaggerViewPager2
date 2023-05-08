@@ -7,27 +7,32 @@ import com.testingapp.callback.ItemClickListener
 import com.testingapp.databinding.RowItemBinding
 import com.testingapp.models.Product
 
-class RecyclerAdapter (
-    private val items : ArrayList<Product>
-    , private val itemClickListener: ItemClickListener
+class RecyclerAdapter(
+    private val items: ArrayList<Product>, private val itemClickListener: ItemClickListener
 
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    inner class ItemViewHolder(val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(RowItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            RowItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val h = holder as ItemViewHolder
-        h.binding.products.text = items[position].title
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        with(holder) {
+            binding.products.text = items[position].title
 
-        h.binding.products.setOnClickListener {
-            itemClickListener.onItemClicked(items[position])
+            binding.products.setOnClickListener {
+                itemClickListener.onItemClicked(items[position])
+            }
         }
     }
-
 
     override fun getItemCount(): Int {
         return items.size
